@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="desciption" content="Predict whether borrower will pay their loan in full or not">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Loan Status Prediction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+
+
+
+<body class="bg-gray-300 mt-4">
+
+    <div class="rounded bg-white container mx-auto p-4 border-t-4 border-blue-dark max-w-lg shadow">
+
+        <div class="leading-normal">
+
+            <h1>Loan Status Prediction</h1>
+
+            <p class="text-grey-darker">Fill the form below to predict whether someone is likely to pay their loan back or not</p>
+ 
+
+        </div>
+
+        <div class="mt-4" id="form">
+
+            <div class="alert error bg-red-lightest hidden p-4 text-center rounded mb-4">
+
+            </div>
+
+            <form>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="loan_amnt" placeholder="Loan Amount: Ex 2500">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="int_rate" placeholder="Interest Rate: Ex .14" maxlength="6">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="annual_inc" maxlength="10" placeholder="Annual Income: Ex 85000">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="dti" maxlength="6" placeholder="dti Ex 2.9">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="open_acc" placeholder="Number of Open Accounts" maxlength="3">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="revol_bal" placeholder="Revolving Balance" maxlength="6">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="revol_util" placeholder="Revoling Util Ex .49" maxlength="6">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="total_acc" placeholder="Total Accounts" maxlength="3">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="issue_d_mnth" placeholder="3 Letter Issue Date Month: Ex Jan" maxlength="3">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="earliest_cr_line_mnth" placeholder="3 Letter Earliest Credit Line Month: Ex Feb" maxlength="3">
+
+                </div>
+
+                <div class="flex flex-1 border-b border-b-2 border-blue-dark max-w-sm mb-2">
+
+                    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none"
+
+                        type="text" id="last_credit_pull_d_mnth" placeholder="3 Letter Last Credit Pulled Month: Ex Mar" maxlength="3">
+
+                </div>
+
+                <div class="leading-normal">
+
+
+
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="term">Term: </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="term" checked value=" 36 months">36 months</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="term" value=" 60 months">60 months</label>  
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="grade">Grade: </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="A" checked>A</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="B">B</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="C" >C</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="D">D</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="E">E</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="F">F</label>
+                            
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="grade" value="G">G</label>
+                        
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="emp_length">Employment Length </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="< 1 year" checked>Less than 1 year</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="1 year">1 year</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="2 years">2 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="3 years">3 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="4 years">4 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="5 years">5 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="6 years">6 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="7 years">7 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="8 years">8 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="9 years">9 years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="10+ years">10+ years</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="emp_length" value="Unknown">Unknown</label>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="home_ownership">Home Ownership: </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="home_ownership" checked value="RENT">Rent</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="home_ownership" value="OWN">Own</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="home_ownership" value="MORTGAGE">Mortgage</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="home_ownership" value="OTHER">Other</label>                           
+
+                        </div>
+
+                    </div>                    
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="verification_status">Verification Status: </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="verification_status" checked value="Not Verified">Not Verified</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="verification_status" value="Source Verified">Source Verified</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="verification_status" value="Verified">Verified</label>  
+
+                        </div>
+
+                    </div>                    
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="purpose">Purpose for Loan </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="debt_consolidation" checked>Debt Consolidation</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="moving">Moving</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="home_improvement">Home Improvement</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="house">House</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="small_business">Small Business</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="major_purchase">Major Purchase</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="educational">Educational</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="car">Car</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="credit_card">Credit Card</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="wedding">Wedding</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="medical">Medical</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="vaction">Vacation</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="renewable_energy">Renewable Energy</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="purpose" value="other">Other</label>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="delinq_2yrs_2cat">Number of delinquencies in past 2 years: </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="delinq_2yrs_2cat" checked value="0">0</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="delinq_2yrs_2cat" value="1+">1 or more</label>      
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="inq_last_6mths_2cats">The number of inquiries by creditors during the past 6 months </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="inq_last_6mths_2cats" checked value="0">0</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="inq_last_6mths_2cats" value="1+">1 or more</label>                        
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="pub_rec_2cats">Number of derogatory public records </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="pub_rec_2cats" checked value="0">0</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="pub_rec_2cats" value="1+">1 or more</label>
+                         
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-grey-dark font-semibold" for="pub_rec_bankruptcies_2cats">Number of Bankruptcies </label>
+
+                        <div class="flex flex-col">
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="pub_rec_bankruptcies_2cats" checked value="0">0</label>
+
+                            <label class="text-sm text-grey-dark"><input class="mr-2" type="radio" name="pub_rec_bankruptcies_2cats" value="1+">1 or more</label>                        
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </form>
+
+            <div class="mt-4">
+
+                <button id="predict" class="border-2 text-white bg-blue-500 font-semibold border-blue-dark px-2 py-1 rounded">Predict!</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+
+
+<script type="text/javascript">
+
+    function display_error(message) {
+
+        $(".error").removeClass("alert-success alert-warning");
+
+        $(".error").addClass("alert-danger");
+
+        $("div.error").html(`<strong>${message}</strong>`);
+
+        $("div.error").css("display", "block");
+
+        setTimeout(() => {
+
+            $(".error").html("");
+
+            $(".error").css("display", "none");
+
+        }, 2000)
+
+    }
+
+
+
+    function make_form() {
+
+        let form = {};
+
+        form['loan_amnt'] = $("#loan_amnt").val();
+
+        form['int_rate'] = $("#int_rate").val();
+
+        form['annual_inc'] = $("#annual_inc").val();
+
+        form['dti'] = $("#dti").val();
+
+        form['open_acc'] = $("#open_acc").val();
+
+        form['revol_bal'] = $("#revol_bal").val();
+
+        form['revol_util'] = $("#revol_util").val();
+
+        form['total_acc'] = $("#total_acc").val();
+
+        form['issue_d_mnth'] = $("#issue_d_mnth").val();
+
+        form['earliest_cr_line_mnth'] = $("#earliest_cr_line_mnth").val();
+
+        form['last_credit_pull_d_mnth'] = $("#last_credit_pull_d_mnth").val();
+
+        form['term'] = $('input[name=term]:checked').val();
+
+        form['grade'] = $('input[name=grade]:checked').val();
+
+        form['emp_length'] = $('input[name=emp_length]:checked').val();
+
+        form['home_ownership'] = $('input[name=home_ownership]:checked').val();
+
+        form['verification_status'] = $('input[name=verification_status]:checked').val();
+
+        form['purpose'] = $('input[name=purpose]:checked').val();
+
+        form['delinq_2yrs_2cat'] = $('input[name=delinq_2yrs_2cat]:checked').val();
+
+        form['inq_last_6mths_2cats'] = $('input[name=inq_last_6mths_2cats]:checked').val();
+
+        form['pub_rec_2cats'] = $('input[name=pub_rec_2cats]:checked').val();
+
+        form['pub_rec_bankruptcies_2cats'] = $('input[name=pub_rec_bankruptcies_2cats]:checked').val();
+
+        return form;
+
+    }
+
+
+
+    $("#predict").click(() => {
+
+        let loan_amnt = $("#loan_amnt").val();
+
+        let int_rate = $("#int_rate").val();
+
+        let annual_inc = $("#annual_inc").val();
+
+        let dti = $("#dti").val();
+
+        let open_acc = $("#open_acc").val();
+
+        let revol_bal = $("#revol_bal").val();
+
+        let revol_util = $("#revol_util").val();
+
+        let total_acc = $("#total_acc").val();
+
+        let issue_d_mnth = $("#issue_d_mnth").val();
+
+        let earliest_cr_line_mnth = $("#earliest_cr_line_mnth").val();
+
+        let last_credit_pull_d_mnth = $("#last_credit_pull_d_mnth").val();
+
+        let term = $('input[name=term]:checked').val();
+
+        let grade = $('input[name=grade]:checked').val();
+
+        let emp_length  = $('input[name=emp_length]:checked').val();
+
+        let home_ownership  = $('input[name=home_ownership]:checked').val();
+
+        let verification_status  = $('input[name=verification_status]:checked').val();
+
+        let purpose = $('input[name=purpose]:checked').val();
+
+        let delinq_2yrs_2cat  = $('input[name=delinq_2yrs_2cat]:checked').val();
+
+        let inq_last_6mths_2cats  = $('input[name=inq_last_6mths_2cats]:checked').val();
+
+        let pub_rec_2cats  = $('input[name=pub_rec_2cats]:checked').val();
+
+        let pub_rec_bankruptcies_2cats = $('input[name=pub_rec_bankruptcies_2cats]:checked').val();
+
+        let regex = /^[0-9]+$/;
+
+        if (loan_amnt == ""|| !loan_amnt.match(regex)) {
+
+            display_error("Please enter a valid amount");
+
+            return;
+
+        }
+
+        if (int_rate == "" ) {
+
+            display_error("Please enter a valid interest rate");
+
+            return;
+
+        }
+
+
+        if (dti == "" || open_acc == "" || revol_bal == "" || revol_util == "" || total_acc == "" || issue_d_mnth == "" || earliest_cr_line_mnth == "" || last_credit_pull_d_mnth == "" ) {
+
+            display_error("Please enter a valid value");
+
+            return;
+
+        }
+
+
+        $("#predict").text("Predicting...");
+
+        let form = make_form();
+
+        $.ajax({
+
+            type: "POST",
+
+            contentType: 'application/json;charset=UTF-8',
+
+            enctype: 'multipart/form-data',
+
+            url: "/predict",
+
+            cache: false,
+
+            dataType: 'json',
+
+            timeout: 600000,
+
+            data: JSON.stringify(form),
+
+            success: function (data) {
+
+                if (data["loan_status"] == 'Fully Paid') {
+
+                    let p=data['probability']
+                    swal("Fully Paid", `Likelihood Score that client will fully pay loan: ${p}`, "success");
+
+                    $("#predict").text("Predict");
+
+                }
+
+                else {
+                    let p=data['probability']
+                    swal("Charged Off", `Likelihood Score that client will fully pay loan: ${p}`, "warning");
+                     <!-- ${probability_score} -->
+
+                    $("#predict").text("Predict");
+
+                }
+
+            },
+
+            error: function (e) {
+
+                swal("Error", "Some error occured, please try again later", "error");
+
+                $("#predict").text("Predict");
+
+            }
+
+        });
+
+    })
+
+
+
+</script>
+
+
+
+</html>

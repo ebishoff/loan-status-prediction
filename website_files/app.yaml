@@ -1,0 +1,16 @@
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT main:app
+
+runtime_config:
+  python_version: 3
+
+env_variables:
+    MODEL_BUCKET:  loan-status-prediction.appspot.com
+    MODEL_FILENAME: model.pkl
+    COLS_BUCKET: loan-status-prediction.appspot.com
+    COLS_FILENAME: cols.pkl
+    FIT_BUCKET:  loan-status-prediction.appspot.com
+    FIT_FILENAME: fit.pkl
+    SCALER_BUCKET: loan-status-prediction.appspot.com
+    SCALER_FILENAME: scaler.pkl
